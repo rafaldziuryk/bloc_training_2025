@@ -28,6 +28,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   FutureOr<void> onSearch(SearchEvent event, Emitter<DataState> emit) async {
     emit(DataLoading());
     try {
+      print("query: ${event.query}");
       final products = await dataService.getProducts(NameDescriptionQueryInput(data: event.query));
       emit(DataSuccess(products));
     } catch (e) {

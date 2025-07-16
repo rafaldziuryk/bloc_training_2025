@@ -46,7 +46,7 @@ class MyHomePage extends StatelessWidget {
                       labelText: 'Wyszukaj',
                       border: OutlineInputBorder(),
                     ),
-                    onSubmitted: (value) {
+                    onChanged: (value) {
                       context.read<DataBloc>().add(SearchEvent(value));
                     },
                   ),
