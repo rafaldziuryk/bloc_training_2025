@@ -1,5 +1,4 @@
 import 'package:data_service/data/product_service_impl.dart';
-import 'package:data_service/domain/product_service.dart';
 import 'package:data_service/domain/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,7 +54,6 @@ class MyHomePage extends StatelessWidget {
                         );
                       },
                     );
-                    throw UnimplementedError();
                   case DataFailure():
                     return Center(child: Text(state.error, style: TextStyle(color: Colors.red)));
                 }

@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:data_service/domain/product.dart';
-import 'package:data_service/data/product_service_impl.dart';
-import 'package:data_service/data/cart_service_impl.dart';
-import 'data_bloc/data_bloc.dart';
 import 'cart_bloc/cart_bloc.dart';
 import 'detail_bloc/detail_bloc.dart';
 

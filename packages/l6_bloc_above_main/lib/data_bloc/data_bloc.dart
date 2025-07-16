@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:data_service/domain/product_service.dart';
 import 'package:data_service/domain/product.dart';
-import 'package:data_service/domain/query_input.dart';
 import 'package:equatable/equatable.dart';
 
 part 'data_event.dart';
