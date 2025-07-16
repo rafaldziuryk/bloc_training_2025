@@ -14,9 +14,9 @@ class ConcurrentPage extends StatelessWidget {
         body: Center(
           child: BlocBuilder<CounterBloc, CounterState>(
             builder: (context, state) {
-              switch (state.runtimeType) {
-                case ValueCounterState:
-                  final value = (state as ValueCounterState).counter;
+              switch (state) {
+                case final ValueCounterState valueState:
+                  final value = valueState.counter;
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -27,9 +27,9 @@ class ConcurrentPage extends StatelessWidget {
                       ),
                     ],
                   );
-                case CalculatingCounterState:
+                case const CalculatingCounterState():
                   return const Center(child: CircularProgressIndicator());
-                case InitialCounterState:
+                case const InitialCounterState():
                 default:
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,

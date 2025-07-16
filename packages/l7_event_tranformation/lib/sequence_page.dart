@@ -14,9 +14,9 @@ class SequencePage extends StatelessWidget {
         body: Center(
           child: BlocBuilder<CounterBloc, CounterState>(
             builder: (context, state) {
-              switch (state.runtimeType) {
-                case ValueCounterState:
-                  final value = (state as ValueCounterState).counter;
+              switch (state) {
+                case final ValueCounterState valueState:
+                  final value = valueState.counter;
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -27,9 +27,9 @@ class SequencePage extends StatelessWidget {
                       ),
                     ],
                   );
-                case CalculatingCounterState:
+                case const CalculatingCounterState():
                   return const Center(child: CircularProgressIndicator());
-                case InitialCounterState:
+                case const InitialCounterState():
                 default:
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -45,21 +45,25 @@ class SequencePage extends StatelessWidget {
             },
           ),
         ),
-        floatingActionButton: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            FloatingActionButton(
-              onPressed: () => context.read<CounterBloc>().add(CounterIncrement()),
-              tooltip: 'Increment',
-              child: const Icon(Icons.add),
-            ),
-            const SizedBox(height: 8),
-            FloatingActionButton(
-              onPressed: () => context.read<CounterBloc>().add(CounterDecrement()),
-              tooltip: 'Decrement',
-              child: const Icon(Icons.remove),
-            ),
-          ],
+        floatingActionButton: Builder(
+          builder: (context) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FloatingActionButton(
+                  onPressed: () => context.read<CounterBloc>().add(CounterIncrement()),
+                  tooltip: 'Increment',
+                  child: const Icon(Icons.add),
+                ),
+                const SizedBox(height: 8),
+                FloatingActionButton(
+                  onPressed: () => context.read<CounterBloc>().add(CounterDecrement()),
+                  tooltip: 'Decrement',
+                  child: const Icon(Icons.remove),
+                ),
+              ],
+            );
+          }
         ),
       ),
     );

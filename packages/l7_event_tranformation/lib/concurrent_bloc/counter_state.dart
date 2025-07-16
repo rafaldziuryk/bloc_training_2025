@@ -1,24 +1,24 @@
 part of 'counter_bloc.dart';
 
-abstract class CounterState extends Equatable {
+sealed class CounterState extends Equatable {
   const CounterState();
 }
 
-class InitialCounterState extends CounterState {
+final class InitialCounterState extends CounterState {
+  const InitialCounterState();
   @override
   List<Object?> get props => [];
 }
 
-class CalculatingCounterState extends CounterState {
+final class CalculatingCounterState extends CounterState {
+  const CalculatingCounterState();
   @override
   List<Object?> get props => [];
 }
 
-class ValueCounterState extends CounterState {
+final class ValueCounterState extends CounterState {
   final int counter;
-
   const ValueCounterState(this.counter);
-
   @override
   List<Object?> get props => [counter];
 }
