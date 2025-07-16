@@ -51,12 +51,14 @@ class SequencePage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 FloatingActionButton(
+                  heroTag: "increment",
                   onPressed: () => context.read<CounterBloc>().add(CounterIncrement()),
                   tooltip: 'Increment',
                   child: const Icon(Icons.add),
                 ),
                 const SizedBox(height: 8),
                 FloatingActionButton(
+                  heroTag: "decrement",
                   onPressed: () => context.read<CounterBloc>().add(CounterDecrement()),
                   tooltip: 'Decrement',
                   child: const Icon(Icons.remove),

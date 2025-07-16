@@ -66,11 +66,13 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 FloatingActionButton(
+                  heroTag: "increment",
                   onPressed: () => context.read<CounterBloc>().add(IncrementCounterEvent()),
                   tooltip: 'Increment',
                   child: const Icon(Icons.add),
                 ),
                 FloatingActionButton(
+                  heroTag: "decrement",
                   onPressed: () => context.read<CounterBloc>().add(DecrementCounterEvent()),
                   tooltip: 'Decrement',
                   child: const Icon(Icons.remove),

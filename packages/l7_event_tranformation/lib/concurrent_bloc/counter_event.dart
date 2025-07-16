@@ -10,8 +10,8 @@ final class CounterIncrement extends CounterEvent {
   List<Object?> get props => [];
 }
 
-final class CounterDerement extends CounterEvent {
-  const CounterDerement();
+final class CounterDecrement extends CounterEvent {
+  const CounterDecrement();
   @override
   List<Object?> get props => [];
 }

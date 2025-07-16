@@ -21,7 +21,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
       await Future.delayed(const Duration(seconds: 2));
     }, transformer: concurrent());
 
-    on<CounterDerement>((event, emit) async {
+    on<CounterDecrement>((event, emit) async {
       final calculatingState = CalculatingCounterState();
       emit(calculatingState);
       await Future.delayed(const Duration(seconds: 2));
