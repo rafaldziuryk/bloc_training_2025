@@ -14,27 +14,34 @@ class SequencePage extends StatelessWidget {
         body: Center(
           child: BlocBuilder<CounterBloc, CounterState>(
             builder: (context, state) {
-              int? value;
-              bool calculating = false;
-              if (state is ValueCounterState) {
-                value = state.counter;
-              } else if (state is CalculatingCounterState) {
-                calculating = true;
-              } else if (state is InitialCounterState) {
-                value = 0;
+              switch (state.runtimeType) {
+                case ValueCounterState:
+                  final value = (state as ValueCounterState).counter;
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('You have pushed the button this many times:'),
+                      Text(
+                        value.toString(),
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                    ],
+                  );
+                case CalculatingCounterState:
+                  return const Center(child: CircularProgressIndicator());
+                case InitialCounterState:
+                default:
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('You have pushed the button this many times:'),
+                      Text(
+                        '0',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                    ],
+                  );
               }
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('You have pushed the button this many times:'),
-                  calculating
-                      ? const CircularProgressIndicator()
-                      : Text(
-                          (value ?? 0).toString(),
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                ],
-              );
             },
           ),
         ),
