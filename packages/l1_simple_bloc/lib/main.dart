@@ -46,9 +46,33 @@ class _MyHomePageState extends State<MyHomePage> {
               const Text('You have pushed the button this many times:'),
               BlocBuilder<CounterBloc, CounterData>(
                 builder: (context, state) {
-                  return Text(
-                    state.counter.toString(),
-                    style: Theme.of(context).textTheme.headlineMedium,
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        state.counter.toString(),
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          FloatingActionButton(
+                            heroTag: "increment",
+                            onPressed:
+                                () => context.read<CounterBloc>().add(IncrementCounterEvent()),
+                            tooltip: 'Increment',
+                            child: const Icon(Icons.add),
+                          ),
+                          FloatingActionButton(
+                            heroTag: "decrement",
+                            onPressed:
+                                () => context.read<CounterBloc>().add(DecrementCounterEvent()),
+                            tooltip: 'Decrement',
+                            child: const Icon(Icons.remove),
+                          ),
+                        ],
+                      ),
+                    ],
                   );
                 },
               ),
@@ -74,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             );
-          }
+          },
         ), // This trailing comma makes auto-formatting nicer for build methods.
       ),
     );

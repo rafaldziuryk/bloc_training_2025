@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="l8_data_bloc_with_search" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/packages/l8_data_bloc_with_search/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>

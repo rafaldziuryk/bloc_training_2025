@@ -12,11 +12,11 @@ class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DataBloc(dataService: ProductServiceImpl())..add(LoadDataEvent()),
+      create: (context) => DataBloc(dataService: ProductServiceImpl(), cartService: context.read<CartBloc>().cartService)..add(LoadDataEvent()),
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text("L4 Data BLoC"),
+          title: Text("L6 Data BLoC"),
         ),
         body: Builder(
           builder: (context) {
@@ -27,42 +27,37 @@ class ListPage extends StatelessWidget {
                     return SizedBox();
                   case DataLoading():
                     return Center(child: CircularProgressIndicator());
-                  case DataSuccess(products: List<Product> products):
-                    return BlocBuilder<CartBloc, CartState>(
-                      builder: (context, cartState) {
-                        return ListView.builder(
-                          itemCount: products.length,
-                          itemBuilder: (context, index) {
-                            final item = products[index];
-                            final quantity = cartState is CartData ? cartState.cart[item] ?? 0 : 0;
-                            return ListTile(
-                              title: Text(item.name),
-                              subtitle: Text(item.description),
-                              leading: Text(item.id),
-                              trailing: quantity > 0 
-                                ? Container(
-                                    padding: EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).primaryColor,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Text(
-                                      '$quantity',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  )
-                                : null,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => DetailPage(productId: item.id),
+                  case DataSuccess(products: Map<Product, int> products):
+                    return ListView.builder(
+                      itemCount: products.length,
+                      itemBuilder: (context, index) {
+                        final item = products.entries.toList()[index];
+                        return ListTile(
+                          title: Text(item.key.name),
+                          subtitle: Text(item.key.description),
+                          leading: Text(item.key.id),
+                          trailing: item.value > 0
+                            ? Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  '${item.value}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                );
-                              },
+                                ),
+                              )
+                            : null,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailPage(productId: item.key.id),
+                              ),
                             );
                           },
                         );

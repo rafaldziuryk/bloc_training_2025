@@ -17,7 +17,7 @@ final class DataLoading extends DataState {
 final class DataSuccess extends DataState {
   const DataSuccess(this.products);
 
-  final List<Product> products;
+  final Map<Product, int> products;
 
   @override
   List<Object> get props => [products];

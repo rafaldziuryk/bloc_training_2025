@@ -39,7 +39,7 @@ class MyHomePage extends StatelessWidget {
               builder: (context, state) {
                 switch (state) {
                   case DataInitial():
-                    return SizedBox();
+                    return SizedBox.shrink();
                   case DataLoading():
                     return Center(child: CircularProgressIndicator());
                   case DataSuccess(products: List<Product> products):
