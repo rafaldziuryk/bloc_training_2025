@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="l6_bloc_above_main" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/packages/l6_bloc_above_main/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>

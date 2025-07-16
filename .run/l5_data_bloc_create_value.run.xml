@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="l5_data_bloc_create_value" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/packages/l5_data_bloc_create_value/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>
