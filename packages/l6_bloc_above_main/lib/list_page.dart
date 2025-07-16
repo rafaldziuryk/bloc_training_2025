@@ -3,6 +3,7 @@ import 'package:data_service/domain/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:l6_bloc_above_main/data_bloc/data_bloc.dart';
+import 'package:l6_bloc_above_main/cart_bloc/cart_bloc.dart';
 import 'detail_page.dart';
 
 class ListPage extends StatelessWidget {
@@ -27,20 +28,41 @@ class ListPage extends StatelessWidget {
                   case DataLoading():
                     return Center(child: CircularProgressIndicator());
                   case DataSuccess(products: List<Product> products):
-                    return ListView.builder(
-                      itemCount: products.length,
-                      itemBuilder: (context, index) {
-                        final item = products[index];
-                        return ListTile(
-                          title: Text(item.name),
-                          subtitle: Text(item.description),
-                          leading: Text(item.id),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailPage(productId: item.id),
-                              ),
+                    return BlocBuilder<CartBloc, CartState>(
+                      builder: (context, cartState) {
+                        return ListView.builder(
+                          itemCount: products.length,
+                          itemBuilder: (context, index) {
+                            final item = products[index];
+                            final quantity = cartState is CartData ? cartState.cart[item] ?? 0 : 0;
+                            return ListTile(
+                              title: Text(item.name),
+                              subtitle: Text(item.description),
+                              leading: Text(item.id),
+                              trailing: quantity > 0 
+                                ? Container(
+                                    padding: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Text(
+                                      '$quantity',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  )
+                                : null,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailPage(productId: item.id),
+                                  ),
+                                );
+                              },
                             );
                           },
                         );

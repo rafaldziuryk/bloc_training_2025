@@ -4,7 +4,8 @@ import 'package:data_service/domain/product.dart';
 import 'package:data_service/data/product_service_impl.dart';
 import 'package:data_service/data/cart_service_impl.dart';
 import 'data_bloc/data_bloc.dart';
-import 'cart/cart_bloc.dart';
+import 'cart_bloc/cart_bloc.dart';
+import 'detail_bloc/detail_bloc.dart';
 
 class DetailPage extends StatelessWidget {
   final String productId;
@@ -13,15 +14,8 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => DataBloc(dataService: ProductServiceImpl())..add(LoadDataEvent()),
-        ),
-        BlocProvider(
-          create: (context) => CartBloc(CartServiceImpl())..add(CartLoadEvent()),
-        ),
-      ],
+    return BlocProvider(
+      create: (context) => DetailBloc(productId: productId)..add(LoadDetailEvent()),
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -29,23 +23,14 @@ class DetailPage extends StatelessWidget {
         ),
         body: Builder(
           builder: (context) {
-            return BlocBuilder<DataBloc, DataState>(
+            return BlocBuilder<DetailBloc, DetailState>(
               builder: (context, state) {
                 switch (state) {
-                  case DataInitial():
+                  case DetailInitial():
                     return SizedBox();
-                  case DataLoading():
+                  case DetailLoading():
                     return Center(child: CircularProgressIndicator());
-                  case DataSuccess(products: List<Product> products):
-                    final product = products.firstWhere(
-                      (p) => p.id == productId,
-                      orElse: () => Product(id: '', name: 'Nie znaleziono', description: ''),
-                    );
-                    
-                    if (product.id.isEmpty) {
-                      return Center(child: Text('Produkt nie został znaleziony'));
-                    }
-                    
+                  case DetailSuccess(product: final product):
                     return Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
@@ -98,7 +83,7 @@ class DetailPage extends StatelessWidget {
                         ],
                       ),
                     );
-                  case DataFailure():
+                  case DetailFailure():
                     return Center(child: Text(state.error, style: TextStyle(color: Colors.red)));
                 }
               },
