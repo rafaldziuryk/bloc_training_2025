@@ -4,7 +4,7 @@ import 'package:data_service/domain/product_service.dart';
 import 'package:data_service/domain/product.dart';
 import 'package:data_service/domain/query_input.dart';
 import 'package:equatable/equatable.dart';
-import 'package:rxdart/rxdart.dart'; //TODO: zaglebic sie w rxdart
+import 'package:rxdart/rxdart.dart';
 
 part 'data_event.dart';
 

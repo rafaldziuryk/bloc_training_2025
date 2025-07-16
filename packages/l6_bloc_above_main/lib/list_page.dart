@@ -1,4 +1,3 @@
-import 'package:data_service/data/cart_service_impl.dart';
 import 'package:data_service/data/product_service_impl.dart';
 import 'package:data_service/domain/product.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,7 @@ class ListPage extends StatelessWidget {
         ),
         body: Builder(
           builder: (context) {
-            return BlocBuilder<DataBloc, DataState>( // zeby databloc zwracal nie tylko 
+            return BlocBuilder<DataBloc, DataState>(
               builder: (context, state) {
                 switch (state) {
                   case DataInitial():

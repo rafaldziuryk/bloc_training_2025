@@ -28,7 +28,7 @@ class AppBlocObserver implements BlocObserver {
 
   @override
   void onTransition(Bloc<dynamic, dynamic> bloc, Transition<dynamic, dynamic> transition) {
-    print('${bloc.runtimeType.toString()} onChange $transition');
+    // print('${bloc.runtimeType.toString()} onChange $transition');
   }
 
 }
