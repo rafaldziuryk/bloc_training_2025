@@ -1,0 +1,41 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flutter: l1_simple_bloc",
+      "request": "launch",
+      "type": "dart",
+      "program": "packages/l1_simple_bloc/lib/main.dart"
+    },
+    {
+      "name": "Flutter: l2_simple_bloc",
+      "request": "launch",
+      "type": "dart",
+      "program": "packages/l2_simple_bloc/lib/main.dart"
+    },
+    {
+      "name": "Flutter: l3_simple_bloc",
+      "request": "launch",
+      "type": "dart",
+      "program": "packages/l3_simple_bloc/lib/main.dart"
+    },
+    {
+      "name": "Flutter: l4_data_bloc",
+      "request": "launch",
+      "type": "dart",
+      "program": "packages/l4_data_bloc/lib/main.dart"
+    },
+    {
+      "name": "Flutter: l5_data_bloc_create_value",
+      "request": "launch",
+      "type": "dart",
+      "program": "packages/l5_data_bloc_create_value/lib/main.dart"
+    },
+    {
+      "name": "Flutter: l6_bloc_above_main",
+      "request": "launch",
+      "type": "dart",
+      "program": "packages/l6_bloc_above_main/lib/main.dart"
+    }
+  ]
+} 
