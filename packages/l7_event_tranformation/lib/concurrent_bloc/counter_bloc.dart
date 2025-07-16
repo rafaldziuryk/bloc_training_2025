@@ -11,6 +11,11 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
   int counter = 0;
 
   CounterBloc() : super(InitialCounterState()) {
+
+    on<CounterEvent>((event, emit) async {
+
+    });
+
     on<CounterIncrement>((event, emit) async {
       final calculatingState = CalculatingCounterState();
       emit(calculatingState);

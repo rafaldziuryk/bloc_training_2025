@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:l3_simple_bloc/counter_bloc/counter_bloc.dart';
+import 'package:l3_simple_bloc/product/product_bloc.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -33,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CounterBloc(),
+      create: (context) => ProductBloc(),
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -41,32 +43,35 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Builder(
           builder: (context) {
-            return BlocListener<CounterBloc, CounterState>(
-              listenWhen: (previous, current) => current is CounterData,
-              listener: (context, state) {
-                final counter = (state as CounterData).counter;
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(counter.toString()), duration: Duration(microseconds: 300),));
-                },
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text('You have pushed the button this many times:'),
-                    BlocBuilder<CounterBloc, CounterState>(
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  TextField(
+                    onSubmitted: (value) => context.read<ProductBloc>()..add(ProductAdd(product: value)),
+                  ),
+                  const Text('Product list:'),
+                  Expanded(
+                    child: BlocBuilder<ProductBloc, ProductState>(
                       builder: (context, state) {
                         switch (state) {
-                          case CounterData(counter: int counter):
-                            return Text(
-                              counter.toString(),
-                              style: Theme.of(context).textTheme.headlineMedium,
+                          case ProductList(products: final products):
+                            return ListView.builder(
+                              itemCount: products.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: Text(products[index]),
+                                  trailing: CloseButton(
+                                    onPressed: ()=> context.read<ProductBloc>()..add(ProductDelete(product: products[index])),
+                                  ),
+                                );
+                              },
                             );
-                          case CounterCalculating():
-                            return CircularProgressIndicator();
                         }
                       },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           },

@@ -9,6 +9,8 @@ class Product {
     required this.description,
   });
 
+  int get idInt => int.parse(id.substring(4));
+
   @override
   String toString() {
     return 'Product(name: $name, id: $id, description: $description)';

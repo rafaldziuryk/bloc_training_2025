@@ -14,7 +14,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     on<LoadDataEvent>(onInit);
   }
 
+
   final ProductService dataService;
+
 
   FutureOr<void> onInit(event, emit) async {
     emit(DataLoading());
@@ -25,4 +27,5 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       emit(DataFailure(e.toString()));
     }
   }
+
 }

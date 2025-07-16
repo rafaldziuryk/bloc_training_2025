@@ -60,28 +60,20 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-        floatingActionButton: BlocBuilder<CounterBloc, CounterState>(
-          builder: (context, state) {
+        floatingActionButton: Builder(
+          builder: (context) {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 FloatingActionButton(
                   heroTag: "increment",
-                  onPressed:
-                      () =>
-                          state is! CounterCalculating
-                              ? context.read<CounterBloc>().add(IncrementCounterEvent())
-                              : null,
+                  onPressed: () => context.read<CounterBloc>().add(IncrementCounterEvent()),
                   tooltip: 'Increment',
                   child: const Icon(Icons.add),
                 ),
                 FloatingActionButton(
                   heroTag: "decrement",
-                  onPressed:
-                      () =>
-                          state is! CounterCalculating
-                              ? context.read<CounterBloc>().add(DecrementCounterEvent())
-                              : null,
+                  onPressed: () => context.read<CounterBloc>().add(DecrementCounterEvent()),
                   tooltip: 'Decrement',
                   child: const Icon(Icons.remove),
                 ),

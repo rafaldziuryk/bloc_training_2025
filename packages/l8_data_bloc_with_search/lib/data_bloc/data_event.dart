@@ -10,8 +10,16 @@ class LoadDataEvent extends DataEvent {
 }
 
 final class SearchEvent extends DataEvent {
-  final String query;
-  const SearchEvent(this.query);
+  final String name;
+  final String from;
+  final String to;
+  const SearchEvent(this.name, this.from, this.to);
   @override
-  List<Object?> get props => [query];
+  List<Object?> get props => [name, from, to];
+}
+
+final class RemoveDataEvent extends DataEvent {
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
 }

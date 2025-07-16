@@ -1,9 +1,11 @@
+import 'package:data_service/data/cart_service_impl.dart';
 import 'package:data_service/data/product_service_impl.dart';
 import 'package:data_service/domain/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:l6_bloc_above_main/data_bloc/data_bloc.dart';
 import 'package:l6_bloc_above_main/cart_bloc/cart_bloc.dart';
+import 'package:l6_bloc_above_main/data_bloc/data_bloc.dart';
+
 import 'detail_page.dart';
 
 class ListPage extends StatelessWidget {
@@ -12,15 +14,19 @@ class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DataBloc(dataService: ProductServiceImpl(), cartService: context.read<CartBloc>().cartService)..add(LoadDataEvent()),
+      create: (context) => DataBloc(
+        dataService: ProductServiceImpl(), 
+        cartService: context.read<CartBloc>().cartService,
+        )..add(LoadDataEvent()),
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text("L6 Data BLoC"),
         ),
         body: Builder(
           builder: (context) {
-            return BlocBuilder<DataBloc, DataState>(
+            return BlocBuilder<DataBloc, DataState>( // zeby databloc zwracal nie tylko 
               builder: (context, state) {
                 switch (state) {
                   case DataInitial():
@@ -31,12 +37,13 @@ class ListPage extends StatelessWidget {
                     return ListView.builder(
                       itemCount: products.length,
                       itemBuilder: (context, index) {
+                        // final item = products[index];
                         final item = products.entries.toList()[index];
                         return ListTile(
                           title: Text(item.key.name),
                           subtitle: Text(item.key.description),
                           leading: Text(item.key.id),
-                          trailing: item.value > 0
+                          trailing: item.value > 0  //
                             ? Container(
                                 padding: EdgeInsets.all(8),
                                 decoration: BoxDecoration(

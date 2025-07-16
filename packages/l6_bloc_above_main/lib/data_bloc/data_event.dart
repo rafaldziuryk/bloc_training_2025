@@ -9,6 +9,11 @@ class LoadDataEvent extends DataEvent {
   List<Object?> get props => [];
 }
 
+class _CalculateEvent extends DataEvent {
+  @override
+  List<Object?> get props => throw UnimplementedError();
+}
+
 class RemoveProductEvent extends DataEvent {
   final Product product;
 

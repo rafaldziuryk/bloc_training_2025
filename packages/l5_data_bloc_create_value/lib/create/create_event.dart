@@ -6,5 +6,3 @@ class CreateEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
-
-

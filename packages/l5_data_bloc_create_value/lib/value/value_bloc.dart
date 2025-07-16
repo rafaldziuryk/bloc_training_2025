@@ -16,9 +16,10 @@ class ValueBloc extends Bloc<ValueEvent, ValueState> {
         }),
         onData: (data) => ValueState(data),
       );
-    });
-    subscription = Stream.periodic(Duration(seconds: 1)).listen((event) {
-      add(ValueEvent());
+
+      // subscription = Stream.periodic(Duration(seconds: 1)).listen((event) {
+      //   add(ValueEvent());
+      // });
     });
   }
 
@@ -26,7 +27,6 @@ class ValueBloc extends Bloc<ValueEvent, ValueState> {
 
   @override
   Future<void> close() {
-    // subscription.cancel();
     return super.close();
   }
 }
