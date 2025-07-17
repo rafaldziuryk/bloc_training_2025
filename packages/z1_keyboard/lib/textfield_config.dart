@@ -22,5 +22,5 @@ class TextfieldConfig extends Equatable{
   }
   
   @override
-  List<Object?> get props => [controller, validation];
+  List<Object?> get props => [controller.text, validation];
 }

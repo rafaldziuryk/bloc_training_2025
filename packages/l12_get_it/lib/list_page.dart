@@ -14,6 +14,7 @@ class ListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<DataBloc>()..add(LoadDataEvent()),
+      // create: (context) => sl<DataBloc>()..add(LoadDataEvent()),
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
