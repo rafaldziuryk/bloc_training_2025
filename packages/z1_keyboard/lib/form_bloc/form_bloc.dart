@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 import 'package:z1_keyboard/form_repository.dart';
 import 'package:z1_keyboard/keyboard_functionals.dart';
@@ -21,6 +22,7 @@ class FormBloc extends Bloc<FormEvent, InputFormState> {
   FutureOr<void> _onLoad(LoadEvent event,Emitter<InputFormState> emit) async {
     emit(FormLoading());
     try {
+      await formRepository.get(TextfieldConfig(controller: TextEditingController()));
       textFields = await formRepository.getTextFieldConfigs();
       emit(FormSuccess(
         // validations: List.generate(textFields.length, (index) => null), 

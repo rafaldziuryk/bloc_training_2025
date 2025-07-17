@@ -3,6 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:z1_keyboard/form_bloc/form_bloc.dart';
+import 'package:z1_keyboard/keyboard_functionals.dart';
 import 'package:z1_keyboard/textfield_config.dart';
 
 import '../form_repository_mock.dart';
@@ -23,7 +24,9 @@ void main() {
     formBloc = FormBloc(formRepository: formRepository);
   });
 
-  // setupall
+  setUpAll(() {
+    registerFallbackValue(TextfieldConfig(controller: TextEditingController()));
+  });
 
   tearDown(() {
     formBloc.close();
@@ -45,6 +48,11 @@ void main() {
       expect: () => [
         
       ],
+      verify: (_) {
+        verifyNever(() => formRepository.getTextFieldConfigs(),);
+        // verify(() => formRepository.getTextFieldConfigs(),).called(0); // jesli nie ma wywolan to nie dawac called 0 tylko verifyNever
+        verifyNoMoreInteractions(formRepository);
+      }
     );
 
     blocTest<FormBloc, InputFormState>(
@@ -95,6 +103,88 @@ void main() {
           TextfieldConfig(controller: TextEditingController(text: "5")),
           textEditConfigs[1],
         ], index: 0)
+      ],
+    );
+
+    blocTest<FormBloc, InputFormState>(
+      "remove char ",
+      // seed: () => FormSuccess(textFields: textEditConfigs, index: 0), 
+      setUp: () => formRepository.mockSuccess(["5",""]),
+      build: () => formBloc,
+      act: (bloc) {
+        bloc.add(LoadEvent());
+        bloc.add(NewCharFormEvent(value: KeyboardFunctionals.backspace));
+      },
+      expect: () => [
+        FormLoading(),
+        FormSuccess(textFields: textEditConfigs, index: 0)
+      ],
+      verify: (_) {
+        verify(() => formRepository.getTextFieldConfigs(),).called(1);
+        verifyNoMoreInteractions(formRepository);
+      }
+    );
+
+
+    blocTest<FormBloc, InputFormState>(
+      "go up",
+      // seed: () => FormSuccess(textFields: textEditConfigs, index: 0), 
+      setUp: () => formRepository.mockSuccess(["","", ""]),
+      build: () => formBloc,
+      act: (bloc) {
+        bloc.add(LoadEvent());
+        bloc.add(NewCharFormEvent(value: KeyboardFunctionals.up));
+      },
+      expect: () => [
+        FormLoading(),
+        FormSuccess(textFields: [
+          TextfieldConfig(controller: TextEditingController(text: "")),
+          TextfieldConfig(controller: TextEditingController(text: "")),
+          TextfieldConfig(controller: TextEditingController(text: "")),
+        ], index: 0),
+        FormSuccess(textFields: [
+          TextfieldConfig(controller: TextEditingController(text: "")),
+          TextfieldConfig(controller: TextEditingController(text: "")),
+          TextfieldConfig(controller: TextEditingController(text: "")),
+        ], index: 2),
+      ],
+    );
+
+    blocTest<FormBloc, InputFormState>(
+      "go down",
+      // seed: () => FormSuccess(textFields: textEditConfigs, index: 0), 
+      setUp: () => formRepository.mockSuccess(["","", ""]),
+      build: () => formBloc,
+      act: (bloc) {
+        bloc.add(LoadEvent());
+        bloc.add(NewCharFormEvent(value: KeyboardFunctionals.down));
+      },
+      expect: () => [
+        FormLoading(),
+        FormSuccess(textFields: [
+          TextfieldConfig(controller: TextEditingController(text: "")),
+          TextfieldConfig(controller: TextEditingController(text: "")),
+          TextfieldConfig(controller: TextEditingController(text: "")),
+        ], index: 0),
+        FormSuccess(textFields: [
+          TextfieldConfig(controller: TextEditingController(text: "")),
+          TextfieldConfig(controller: TextEditingController(text: "")),
+          TextfieldConfig(controller: TextEditingController(text: "")),
+        ], index: 1),
+      ],
+    );
+
+
+
+    blocTest<FormBloc, InputFormState>(
+      "test",
+      setUp: () => when(() => formRepository.get(any()),).thenAnswer((_) async => []),
+      build: () => formBloc,
+      act: (bloc) {
+        bloc.add(LoadEvent());
+        bloc.add(NewCharFormEvent(value: KeyboardFunctionals.down));
+      },
+      expect: () => [
       ],
     );
 

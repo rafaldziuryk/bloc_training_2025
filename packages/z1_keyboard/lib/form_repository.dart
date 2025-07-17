@@ -13,4 +13,10 @@ class FormRepository {
       TextfieldConfig(controller:  TextEditingController(text: "")),
     ],);
   } 
+
+  Future<List<TextfieldConfig>> get(TextfieldConfig textFieldConfig) async {
+    return Future.delayed(Duration(milliseconds: 500), () => [
+      textFieldConfig
+],);
+  } 
 }
