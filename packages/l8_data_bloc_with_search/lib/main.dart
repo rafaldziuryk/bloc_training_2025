@@ -19,9 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
       home: const MyHomePage(),
     );
   }
@@ -35,7 +33,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   final _nameController = TextEditingController();
   final _fromController = TextEditingController();
   final _toController = TextEditingController();
@@ -46,9 +43,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => DataBloc(dataService: _dataSerivce)..add(LoadDataEvent()),),
-        BlocProvider(create: (context) => SearchBloc(dataService: _dataSerivce),),
-      ], 
+        BlocProvider(
+          create: (context) => DataBloc(dataService: _dataSerivce)..add(LoadDataEvent()),
+        ),
+        BlocProvider(create: (context) => SearchBloc(dataService: _dataSerivce)),
+      ],
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -56,104 +55,99 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Builder(
           builder: (context) {
-            
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Wyszukaj',
-                      border: OutlineInputBorder(),
+            return BlocListener<SearchBloc, SearchState>(
+              listener: (context, state) {
+                context.read<DataBloc>().add(LoadDataEvent());
+              },
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _nameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Wyszukaj',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        // context.read<DataBloc>().add(SearchEvent(value, _fromController.text, _toController.text));
+                        context.read<SearchBloc>().add(QueryEvent(query: value));
+                      },
                     ),
-                    onChanged: (value) {
-                      // context.read<DataBloc>().add(SearchEvent(value, _fromController.text, _toController.text));
-                      context.read<SearchBloc>().add(QueryEvent(query: value));
-                    },
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    spacing: 20.0,
-                    children: [
-                      Flexible(
-                        child: TextField(
-                          controller: _fromController,
-                          decoration: InputDecoration(
-                            hintText: "0",
-                            labelText: 'od',
-                            border: OutlineInputBorder(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      spacing: 20.0,
+                      children: [
+                        Flexible(
+                          child: TextField(
+                            controller: _fromController,
+                            decoration: InputDecoration(
+                              hintText: "0",
+                              labelText: 'od',
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {
+                              context.read<SearchBloc>().add(FromEvent(from: value));
+                              // context.read<DataBloc>().add(SearchEvent(_nameController.text, value, _toController.text));
+                            },
                           ),
-                          onChanged: (value) {
-                            context.read<SearchBloc>().add(FromEvent(from: value));
-                            // context.read<DataBloc>().add(SearchEvent(_nameController.text, value, _toController.text));
+                        ),
+                        BlocSelector<DataBloc, DataState, String>(
+                          selector: (state) {
+                            return state is DataSuccess ? state.products.length.toString() : "0";
+                          },
+                          builder: (context, state) {
+                            return Flexible(
+                              child: TextField(
+                                controller: _toController,
+                                decoration: InputDecoration(
+                                  hintText: state,
+                                  labelText: 'do',
+                                  border: OutlineInputBorder(),
+                                ),
+                                onChanged: (value) {
+                                  context.read<SearchBloc>().add(ToEvent(to: value));
+                                  // context.read<DataBloc>().add(SearchEvent(_nameController.text, _fromController.text, value));
+                                },
+                              ),
+                            );
                           },
                         ),
-                      ),
-                      BlocSelector<
-                        DataBloc,
-                        DataState,
-                        String
-                      >(
-                        selector: (state) {
-                          return state is DataSuccess
-                            ? state.products.length.toString()
-                            : "0";
-                        },
-                        builder: (context, state) {
-                          return Flexible(
-                            child: TextField(
-                              controller: _toController,
-                              decoration: InputDecoration(
-                                hintText: state,
-                                labelText: 'do',
-                                border: OutlineInputBorder(),
-                              ),
-                              onChanged: (value) {
-                                context.read<SearchBloc>().add(ToEvent(to: value));
-                            // context.read<DataBloc>().add(SearchEvent(_nameController.text, _fromController.text, value));
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: BlocBuilder<DataBloc, DataState>(
+                      builder: (context, state) {
+                        switch (state) {
+                          case DataInitial():
+                            return SizedBox();
+                          case DataLoading():
+                            return Center(child: CircularProgressIndicator());
+                          case DataSuccess(products: List<Product> products):
+                            return ListView.builder(
+                              itemCount: products.length,
+                              itemBuilder: (context, index) {
+                                final item = products[index];
+                                return ListTile(
+                                  title: Text(item.name),
+                                  subtitle: Text(item.description),
+                                  leading: Text(item.id),
+                                );
                               },
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                            );
+                          case DataFailure():
+                            return Center(
+                              child: Text(state.error, style: TextStyle(color: Colors.red)),
+                            );
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: BlocBuilder<DataBloc, DataState>(
-                    builder: (context, state) {
-                      switch (state) {
-                        case DataInitial():
-                          return SizedBox();
-                        case DataLoading():
-                          return Center(child: CircularProgressIndicator());
-                        case DataSuccess(products: List<Product> products):
-                          return ListView.builder(
-                            itemCount: products.length,
-                            itemBuilder: (context, index) {
-                              final item = products[index];
-                              return ListTile(
-                                title: Text(item.name),
-                                subtitle: Text(item.description),
-                                leading: Text(item.id),
-                              );
-                            },
-                          );
-                        case DataFailure():
-                          return Center(
-                            child: Text(
-                              state.error,
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          );
-                      }
-                    },
-                  ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         ),

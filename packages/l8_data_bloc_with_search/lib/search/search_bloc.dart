@@ -7,17 +7,19 @@ import 'package:data_service/domain/search_enum.dart';
 import 'package:meta/meta.dart';
 
 part 'search_event.dart';
+
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final ProductService dataService;
 
-  SearchBloc({required this.dataService}) : super(SearchState(sortType: SortType.alphabet, sortOrder: SortOrder.asc)) {
+  SearchBloc({required this.dataService})
+      : super(SearchState(sortType: SortType.alphabet, sortOrder: SortOrder.asc)) {
     on<SearchEvent>(_onSearch);
   }
 
-  FutureOr<void> _onSearch(SearchEvent event,Emitter<SearchState> emit) {
-    switch(event) {
+  FutureOr<void> _onSearch(SearchEvent event, Emitter<SearchState> emit) {
+    switch (event) {
       case QueryEvent():
         dataService.filterList.removeWhere((element) => element is NameDescriptionQueryInput,);
         dataService.filterList.add(NameDescriptionQueryInput(data: event.query));
@@ -35,6 +37,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         throw UnimplementedError();
     }
 
-    dataService.setFilter(dataService.filterList);
+    SearchState(sortType: SortType.alphabet, sortOrder: SortOrder.asc)
+
+    // dataService.setFilter(dataService.filterList);
   }
 }

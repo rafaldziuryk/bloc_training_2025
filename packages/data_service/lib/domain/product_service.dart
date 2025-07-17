@@ -2,11 +2,11 @@ import 'package:data_service/domain/product.dart';
 import 'package:data_service/domain/query_input.dart';
 
 abstract class ProductService {
-  Future<List<Product>> getProducts(QueryInput input);
+  Future<List<Product>> getProducts();
 
-  Stream<List<Product>> get productStream;
-  Stream<List<Product>> get filteredProductStream;
-  Stream<List<QueryInput>> get filteredStream;
+  // Stream<List<Product>> get productStream;
+  // Stream<List<Product>> get filteredProductStream;
+  // Stream<List<QueryInput>> get filteredStream;
 
   List<QueryInput> filterList = [
     NameDescriptionQueryInput(data: ""),
@@ -17,8 +17,6 @@ abstract class ProductService {
   void add(Product product);
 
   void remove(Product product);
-
-  void setFilter(List<QueryInput> filterList);
 
   bool filter(Product product, QueryInput input) {
     switch (input) {
