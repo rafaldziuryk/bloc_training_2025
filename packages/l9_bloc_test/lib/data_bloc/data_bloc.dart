@@ -25,7 +25,11 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     emit(DataLoading());
     try {
       final products = await dataService.getProducts(NoQueryInput());
-      emit(DataSuccess(products));
+      if (products.isEmpty) {
+        emit(EmptyDataSuccess());
+      } else {
+        emit(DataSuccess(products));
+      }
     } catch (e) {
       emit(DataFailure(e.toString()));
     }

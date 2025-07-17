@@ -23,6 +23,13 @@ final class DataSuccess extends DataState {
   List<Object> get props => [products];
 }
 
+final class EmptyDataSuccess extends DataState {
+  const EmptyDataSuccess();
+
+  @override
+  List<Object> get props => [];
+}
+
 final class DataFailure extends DataState {
   const DataFailure(this.error);
 

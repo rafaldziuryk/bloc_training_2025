@@ -49,6 +49,7 @@ void main() {
         ],
         verify: (_) {
           verify(() => productService.getProducts(any())).called(1);
+          verifyNoMoreInteractions(productService);
         },
       );
 
@@ -81,7 +82,7 @@ void main() {
         act: (bloc) => bloc.add(LoadDataEvent()),
         expect: () => [
           DataLoading(),
-          DataSuccess([]),
+          EmptyDataSuccess(),
         ],
         verify: (_) {
           verify(() => productService.getProducts(any())).called(1);
@@ -232,7 +233,7 @@ void main() {
         act: (bloc) => bloc.add(LoadDataEvent()),
         expect: () => [
           DataLoading(),
-          DataSuccess([]),
+          EmptyDataSuccess(),
         ],
         wait: const Duration(seconds: 2),
       );
