@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="l10_bloc_selector" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/packages/l10_bloc_selector/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>

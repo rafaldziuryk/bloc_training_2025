@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="l11_bloc_watch" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/packages/l11_bloc_watch/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>
