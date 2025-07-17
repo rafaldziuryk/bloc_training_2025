@@ -84,12 +84,12 @@ class _MyHomePageState extends State<MyHomePage> {
                               vertical: 8.0,
                               horizontal: 32.0,
                             ),
-                            child: Text(
-                              state.textFields[index].text,
-                              // decoration: InputDecoration(
-                              //   labelText: 'Pole ${index + 1}',
-                              //   border: const OutlineInputBorder(),
-                              // ),
+                            child: TextField(
+                              controller: state.textFields[index].controller,
+                              decoration: InputDecoration(
+                                labelText: 'Pole ${index + 1}',
+                                border: const OutlineInputBorder(),
+                              ),
                             ),
                           );
                         },).toList()),              

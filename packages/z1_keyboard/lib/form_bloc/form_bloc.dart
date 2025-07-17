@@ -35,42 +35,46 @@ class FormBloc extends Bloc<FormEvent, InputFormState> {
 
   FutureOr<void> _onNewChar(NewCharFormEvent event,Emitter<InputFormState> emit) {
     final value = event.value;
-    if(value is KeyboardFunctionals) {
-      switch(value) {
-        case KeyboardFunctionals.shift:
-          throw UnimplementedError();
-        case KeyboardFunctionals.up:
-          final currentState = state;
-          if(currentState is FormSuccess) {
+
+    final currentState = state;
+    if (currentState is FormSuccess) {
+      if (value is KeyboardFunctionals) {
+        switch (value) {
+          case KeyboardFunctionals.shift:
+            break;
+          case KeyboardFunctionals.up:
             final currentLength = currentState.textFields.length;
-            emit(currentState.copyWith(
-              index: (currentState.index-1 + currentLength) % currentLength
-            ));
-          }
-        case KeyboardFunctionals.down:
-          final currentState = state;
-          if(currentState is FormSuccess) {
-            emit(currentState.copyWith(
-              index: (currentState.index+1) % currentState.textFields.length
-            ));
-          }
-        case KeyboardFunctionals.backspace:
-          // TODO: Handle this case.
-          throw UnimplementedError();
-        case KeyboardFunctionals.enter:
-          // TODO: Handle this case.
-          throw UnimplementedError();
-      }
-    } else if(value is String) {
-      final currentState = state;
-      if(currentState is FormSuccess) {
+            emit(
+              currentState.copyWith(
+                index: (currentState.index - 1 + currentLength) % currentLength,
+              ),
+            );
+          case KeyboardFunctionals.enter:
+          case KeyboardFunctionals.down:
+            emit(
+              currentState.copyWith(
+                index:
+                    (currentState.index + 1) % currentState.textFields.length,
+              ),
+            );
+          case KeyboardFunctionals.backspace:
+            final newList = currentState.textFields;
+            final oldText = newList[currentState.index].controller.text;
+            newList[currentState.index] = newList[currentState.index].copyWith(
+              text: oldText.substring(0,oldText.length - 1),
+            );
+            emit(currentState.copyWith(textFields: newList));
+            
+        }
+      } else if (value is String) {
         final newList = currentState.textFields;
-        final oldText = newList[currentState.index].text;
-        newList[currentState.index] = newList[currentState.index].copyWith(text: oldText + value); 
-        emit(currentState.copyWith(
-          textFields: newList,
-        ));
+        final oldText = newList[currentState.index].controller.text;
+        newList[currentState.index] = newList[currentState.index].copyWith(
+          text: oldText + value,
+        );
+        emit(currentState.copyWith(textFields: newList));
       }
     }
+
   }
 }

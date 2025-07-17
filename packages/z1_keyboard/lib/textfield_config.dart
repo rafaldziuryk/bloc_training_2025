@@ -1,11 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 
 class TextfieldConfig extends Equatable{
-  final String text;
+  final TextEditingController controller;
   final String validation;
 
   const TextfieldConfig({
-    required this.text,
+    required this.controller,
     this.validation = "",
   });
 
@@ -15,11 +16,11 @@ class TextfieldConfig extends Equatable{
     String? validation,
   }){
     return TextfieldConfig(
-      text: text ?? this.text,
+      controller: controller,
       validation: validation ?? this.validation,
-    );
+    )..controller.text = text ?? controller.text;
   }
   
   @override
-  List<Object?> get props => [text, validation];
+  List<Object?> get props => [controller, validation];
 }

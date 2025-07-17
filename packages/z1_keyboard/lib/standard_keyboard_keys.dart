@@ -9,7 +9,7 @@ class StandardKeyboardKeys {
     return KeyboardButtonConfig(
       label: '$index',
       altLabel: String.fromCharCode(33 + index - 1), // !, @, #, ...
-      value: String.fromCharCode(index),
+      value: '$index',
       altValue: String.fromCharCode(33 + index - 1),
     );
   }),
