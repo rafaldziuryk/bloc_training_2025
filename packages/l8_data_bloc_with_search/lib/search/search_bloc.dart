@@ -14,7 +14,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final ProductService dataService;
 
   SearchBloc({required this.dataService})
-      : super(SearchState(sortType: SortType.alphabet, sortOrder: SortOrder.asc)) {
+      : super(SearchState(sortType: SortType.alphabet,
+    sortOrder: SortOrder.asc,
+    query: "",
+    max: 1000,
+    min: 0,)) {
     on<SearchEvent>(_onSearch);
   }
 
@@ -23,21 +27,22 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       case QueryEvent():
         dataService.filterList.removeWhere((element) => element is NameDescriptionQueryInput,);
         dataService.filterList.add(NameDescriptionQueryInput(data: event.query));
+        emit(state.copyWith(query: event.query));
       case FromEvent():
         int fromParsed = int.tryParse(event.from) ?? 0;
         dataService.filterList.removeWhere((element) => element is MinIdQueryInput,);
         dataService.filterList.add(MinIdQueryInput(data: fromParsed));
+        emit(state.copyWith(min: fromParsed));
       case ToEvent():
         int toParsed = int.tryParse(event.to) ?? 1000;
         dataService.filterList.removeWhere((element) => element is MaxIdQueryInput,);
         dataService.filterList.add(MaxIdQueryInput(data: toParsed));
+        emit(state.copyWith(max: toParsed));
       case SortTypeEvent():
         throw UnimplementedError();
       case SortOrderEvent():
         throw UnimplementedError();
     }
-
-    SearchState(sortType: SortType.alphabet, sortOrder: SortOrder.asc)
 
     // dataService.setFilter(dataService.filterList);
   }
