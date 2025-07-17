@@ -1,105 +1,70 @@
 import 'package:flutter/material.dart';
 
-class NumericKeyboard extends StatelessWidget {
-  final void Function(int digit) onDigitPressed;
-  final void Function(String altValue)? onAltPressed;
-  final VoidCallback onArrowUp;
-  final VoidCallback onArrowDown;
-  final VoidCallback onBackspace;
-  final VoidCallback onSubmit;
+class KeyboardButtonConfig {
+  final String label;
+  final String? altLabel;
+  final dynamic value;
+  final dynamic altValue;
+  final IconData? icon;
 
-  /// Alternatywne wartości dla przycisków (np. po długim naciśnięciu lub shift)
-  final Map<int, String>? altDigits;
-  final String? altBackspace;
-  final String? altSubmit;
-  final String? altArrowUp;
-  final String? altArrowDown;
+  const KeyboardButtonConfig({
+    required this.label,
+    this.altLabel,
+    required this.value,
+    this.altValue,
+    this.icon,
+  });
+}
+
+class NumericKeyboard extends StatelessWidget {
+  final List<KeyboardButtonConfig> buttons;
+  final void Function(dynamic value) onPressed;
+  final void Function(dynamic altValue)? onAltPressed;
 
   const NumericKeyboard({
     Key? key,
-    required this.onDigitPressed,
+    required this.buttons,
+    required this.onPressed,
     this.onAltPressed,
-    required this.onArrowUp,
-    required this.onArrowDown,
-    required this.onBackspace,
-    required this.onSubmit,
-    this.altDigits,
-    this.altBackspace,
-    this.altSubmit,
-    this.altArrowUp,
-    this.altArrowDown,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     const double buttonSize = 56;
+    // Ostatni przycisk to nawigacja (góra/dół) w kolumnie
+    final navButtons = buttons.where((b) => b.icon == Icons.arrow_upward || b.icon == Icons.arrow_downward).toList();
+    final mainButtons = buttons.where((b) => b.icon != Icons.arrow_upward && b.icon != Icons.arrow_downward).toList();
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Cyfry 1-9
-        for (var i = 1; i <= 9; i++)
+        for (final btn in mainButtons)
           _SquareButton(
-            label: '$i',
-            altLabel: altDigits?[i],
-            onPressed: () => onDigitPressed(i),
-            onLongPress: altDigits?[i] != null && onAltPressed != null
-                ? () => onAltPressed!(altDigits![i]!)
+            label: btn.label,
+            altLabel: btn.altLabel,
+            icon: btn.icon,
+            onPressed: () => onPressed(btn.value),
+            onLongPress: btn.altValue != null && onAltPressed != null
+                ? () => onAltPressed!(btn.altValue)
                 : null,
             size: buttonSize,
           ),
-        // 0
-        _SquareButton(
-          label: '0',
-          altLabel: altDigits?[0],
-          onPressed: () => onDigitPressed(0),
-          onLongPress: altDigits?[0] != null && onAltPressed != null
-              ? () => onAltPressed!(altDigits![0]!)
-              : null,
-          size: buttonSize,
-        ),
-        // Backspace
-        _SquareButton(
-          icon: Icons.backspace,
-          altLabel: altBackspace,
-          onPressed: onBackspace,
-          onLongPress: altBackspace != null && onAltPressed != null
-              ? () => onAltPressed!(altBackspace!)
-              : null,
-          size: buttonSize,
-        ),
-        // Zatwierdź
-        _SquareButton(
-          icon: Icons.check,
-          altLabel: altSubmit,
-          onPressed: onSubmit,
-          onLongPress: altSubmit != null && onAltPressed != null
-              ? () => onAltPressed!(altSubmit!)
-              : null,
-          size: buttonSize,
-        ),
-        // Nawigacja (góra/dół) w kolumnie po prawej
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _SquareButton(
-              icon: Icons.arrow_upward,
-              altLabel: altArrowUp,
-              onPressed: onArrowUp,
-              onLongPress: altArrowUp != null && onAltPressed != null
-                  ? () => onAltPressed!(altArrowUp!)
-                  : null,
-              size: buttonSize,
-            ),
-            const SizedBox(height: 8),
-            _SquareButton(
-              icon: Icons.arrow_downward,
-              altLabel: altArrowDown,
-              onPressed: onArrowDown,
-              onLongPress: altArrowDown != null && onAltPressed != null
-                  ? () => onAltPressed!(altArrowDown!)
-                  : null,
-              size: buttonSize,
-            ),
+            for (final btn in navButtons)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: _SquareButton(
+                  label: btn.label,
+                  altLabel: btn.altLabel,
+                  icon: btn.icon,
+                  onPressed: () => onPressed(btn.value),
+                  onLongPress: btn.altValue != null && onAltPressed != null
+                      ? () => onAltPressed!(btn.altValue)
+                      : null,
+                  size: buttonSize,
+                ),
+              ),
           ],
         ),
       ],
@@ -108,7 +73,7 @@ class NumericKeyboard extends StatelessWidget {
 }
 
 class _SquareButton extends StatelessWidget {
-  final String? label;
+  final String label;
   final String? altLabel;
   final IconData? icon;
   final VoidCallback onPressed;
@@ -117,7 +82,7 @@ class _SquareButton extends StatelessWidget {
 
   const _SquareButton({
     Key? key,
-    this.label,
+    required this.label,
     this.altLabel,
     this.icon,
     required this.onPressed,
@@ -157,7 +122,7 @@ class _SquareButton extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      label ?? '',
+                      label,
                       style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     if (altLabel != null)

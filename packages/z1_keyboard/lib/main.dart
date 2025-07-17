@@ -53,9 +53,52 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             const SizedBox(height: 32),
             NumericKeyboard(
-              onDigitPressed: (digit) {
+              buttons: [
+                for (var i = 1; i <= 9; i++)
+                  KeyboardButtonConfig(
+                    label: '$i',
+                    altLabel: String.fromCharCode(33 + i - 1), // !, @, #, ...
+                    value: i,
+                    altValue: String.fromCharCode(33 + i - 1),
+                  ),
+                KeyboardButtonConfig(
+                  label: '0',
+                  altLabel: ')',
+                  value: 0,
+                  altValue: ')',
+                ),
+                KeyboardButtonConfig(
+                  label: '',
+                  altLabel: 'DEL',
+                  value: 'backspace',
+                  altValue: 'DEL',
+                  icon: Icons.backspace,
+                ),
+                KeyboardButtonConfig(
+                  label: '',
+                  altLabel: 'OK',
+                  value: 'submit',
+                  altValue: 'OK',
+                  icon: Icons.check,
+                ),
+                KeyboardButtonConfig(
+                  label: '',
+                  altLabel: 'PgUp',
+                  value: 'up',
+                  altValue: 'PgUp',
+                  icon: Icons.arrow_upward,
+                ),
+                KeyboardButtonConfig(
+                  label: '',
+                  altLabel: 'PgDn',
+                  value: 'down',
+                  altValue: 'PgDn',
+                  icon: Icons.arrow_downward,
+                ),
+              ],
+              onPressed: (value) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Wciśnięto cyfrę: $digit')),
+                  SnackBar(content: Text('Wciśnięto: $value')),
                 );
               },
               onAltPressed: (alt) {
@@ -63,42 +106,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   SnackBar(content: Text('Wciśnięto ALT: $alt')),
                 );
               },
-              onArrowUp: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Wciśnięto strzałkę w górę')),
-                );
-              },
-              onArrowDown: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Wciśnięto strzałkę w dół')),
-                );
-              },
-              onBackspace: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Wciśnięto backspace')),
-                );
-              },
-              onSubmit: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Wciśnięto zatwierdź')),
-                );
-              },
-              altDigits: const {
-                1: '!',
-                2: '@',
-                3: '#',
-                4: ' 24',
-                5: '%',
-                6: '^',
-                7: '&',
-                8: '*',
-                9: '(',
-                0: ')',
-              },
-              altBackspace: 'DEL',
-              altSubmit: 'OK',
-              altArrowUp: 'PgUp',
-              altArrowDown: 'PgDn',
             ),
           ],
         ),
