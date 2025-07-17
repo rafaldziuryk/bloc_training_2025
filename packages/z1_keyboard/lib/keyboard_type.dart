@@ -1,0 +1,4 @@
+enum KeyboardType {
+  standard,
+  alternative;
+}

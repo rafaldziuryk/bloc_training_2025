@@ -1,0 +1,55 @@
+
+import 'package:flutter/material.dart';
+import 'package:z1_keyboard/keyboard_button_config.dart';
+import 'package:z1_keyboard/keyboard_functionals.dart';
+
+class AlternativeKeyboardKeys {
+  static List<KeyboardButtonConfig> mainKeys = [
+  ...List.generate(9, (index) {
+    index++;
+    return KeyboardButtonConfig(
+      label: String.fromCharCode(33 + index - 1),
+      altLabel: '$index', // !, @, #, ...
+      value: String.fromCharCode(33 + index - 1),
+      altValue: index,
+    );
+  }),
+    KeyboardButtonConfig(label: ')', altLabel: '9', value: ')', altValue: 0),
+  ];
+
+
+  static Map<KeyboardFunctionals, KeyboardButtonConfig> specialKeys = {
+    KeyboardFunctionals.shift: KeyboardButtonConfig(
+      label: "shift",
+      value: KeyboardFunctionals.shift,
+    ),
+    KeyboardFunctionals.backspace: KeyboardButtonConfig(
+      label: '',
+      altLabel: 'DEL',
+      value: KeyboardFunctionals.backspace,
+      altValue: 'DEL',
+      icon: Icons.backspace,
+    ),
+    KeyboardFunctionals.enter: KeyboardButtonConfig(
+      label: '',
+      altLabel: 'OK',
+      value: KeyboardFunctionals.enter,
+      altValue: 'OK',
+      icon: Icons.check,
+    ),
+    KeyboardFunctionals.up: KeyboardButtonConfig(
+      label: '',
+      altLabel: 'PgUp',
+      value: KeyboardFunctionals.up,
+      altValue: 'PgUp',
+      icon: Icons.arrow_upward,
+    ),
+    KeyboardFunctionals.down: KeyboardButtonConfig(
+      label: '',
+      altLabel: 'PgDn',
+      value: KeyboardFunctionals.down,
+      altValue: 'PgDn',
+      icon: Icons.arrow_downward,
+    ),
+  };
+}

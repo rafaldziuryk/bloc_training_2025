@@ -1,4 +1,10 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:z1_keyboard/form_bloc/form_bloc.dart';
+import 'package:z1_keyboard/form_repository.dart';
+import 'package:z1_keyboard/keyboard_bloc/keyboard_bloc.dart';
+import 'package:z1_keyboard/keyboard_functionals.dart';
 import 'numeric_keyboard.dart';
 
 void main() {
@@ -12,6 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
@@ -32,82 +39,91 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            for (int i = 0; i < 5; i++)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 32.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Pole ${i + 1}',
-                    border: const OutlineInputBorder(),
-                  ),
-                ),
-              ),
-            const SizedBox(height: 32),
-            NumericKeyboard(
-              buttons: [
-                for (var i = 1; i <= 9; i++)
-                  KeyboardButtonConfig(
-                    label: '$i',
-                    altLabel: String.fromCharCode(33 + i - 1), // !, @, #, ...
-                    value: i,
-                    altValue: String.fromCharCode(33 + i - 1),
-                  ),
-                KeyboardButtonConfig(
-                  label: '0',
-                  altLabel: ')',
-                  value: 0,
-                  altValue: ')',
-                ),
-                KeyboardButtonConfig(
-                  label: '',
-                  altLabel: 'DEL',
-                  value: 'backspace',
-                  altValue: 'DEL',
-                  icon: Icons.backspace,
-                ),
-                KeyboardButtonConfig(
-                  label: '',
-                  altLabel: 'OK',
-                  value: 'submit',
-                  altValue: 'OK',
-                  icon: Icons.check,
-                ),
-                KeyboardButtonConfig(
-                  label: '',
-                  altLabel: 'PgUp',
-                  value: 'up',
-                  altValue: 'PgUp',
-                  icon: Icons.arrow_upward,
-                ),
-                KeyboardButtonConfig(
-                  label: '',
-                  altLabel: 'PgDn',
-                  value: 'down',
-                  altValue: 'PgDn',
-                  icon: Icons.arrow_downward,
-                ),
-              ],
-              onPressed: (value) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Wciśnięto: $value')),
-                );
-              },
-              onAltPressed: (alt) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Wciśnięto ALT: $alt')),
-                );
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => KeyboardBloc()),
+        BlocProvider(create: (context) => FormBloc(formRepository: FormRepository())..add(LoadEvent())),
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(widget.title),
+          actions: [
+            BlocBuilder<KeyboardBloc, KeyboardState>(
+              builder: (context, state) {
+                return Text(state.type.toString());
               },
             ),
           ],
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: BlocConsumer<FormBloc, InputFormState>(
+                  listener: (context, state) {
+                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                      setState(() {
+                        
+                      });
+                    },);
+                  },
+                  builder: (context, state) {
+                    return switch(state) {
+                      FormInitial() => SizedBox(),
+                      FormLoading() => Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      FormSuccess() => Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: state.textFields.mapIndexed((index, element) {
+                          return Container(
+                            color: index == state.index ? Colors.amberAccent : Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8.0,
+                              horizontal: 32.0,
+                            ),
+                            child: Text(
+                              state.textFields[index].text,
+                              // decoration: InputDecoration(
+                              //   labelText: 'Pole ${index + 1}',
+                              //   border: const OutlineInputBorder(),
+                              // ),
+                            ),
+                          );
+                        },).toList()),              
+                      FormFailure() => Center(child: Text(state.error, style: TextStyle(color: Colors.red),),),
+                    };
+                  },
+                ),
+              ),
+              const SizedBox(height: 32),
+              BlocBuilder<KeyboardBloc, KeyboardState>(
+                builder: (context, KeyboardState state) {
+                  return NumericKeyboard(
+                    buttons: [
+                      state.specialKeys[KeyboardFunctionals.shift]!,
+                      ...state.mainKeys,
+                      state.specialKeys[KeyboardFunctionals.backspace]!,
+                      state.specialKeys[KeyboardFunctionals.enter]!,
+                      state.specialKeys[KeyboardFunctionals.up]!,
+                      state.specialKeys[KeyboardFunctionals.down]!,
+                    ],
+                    onPressed: (value) {
+                      context.read<KeyboardBloc>().add(NewCharKeyboardEvent(value));
+                      context.read<FormBloc>().add(NewCharFormEvent(value: value));
+                    },
+                    onAltPressed: (alt) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Wciśnięto ALT: $alt')),
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

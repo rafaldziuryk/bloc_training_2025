@@ -1,20 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:z1_keyboard/keyboard_button_config.dart';
 
-class KeyboardButtonConfig {
-  final String label;
-  final String? altLabel;
-  final dynamic value;
-  final dynamic altValue;
-  final IconData? icon;
-
-  const KeyboardButtonConfig({
-    required this.label,
-    this.altLabel,
-    required this.value,
-    this.altValue,
-    this.icon,
-  });
-}
 
 class NumericKeyboard extends StatelessWidget {
   final List<KeyboardButtonConfig> buttons;
