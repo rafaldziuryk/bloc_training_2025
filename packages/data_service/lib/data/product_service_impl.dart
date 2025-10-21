@@ -14,7 +14,7 @@ class ProductServiceImpl extends ProductService {
   Future<List<Product>> getProducts(QueryInput input) async {
     await Future.delayed(Duration(seconds: 1));
 
-    final error = random.nextDouble() < 0.2;
+    final error = random.nextDouble() < 0.5;
 
     if (error) {
       return Future.error("Error");

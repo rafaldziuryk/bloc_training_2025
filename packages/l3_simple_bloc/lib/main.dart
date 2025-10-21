@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
               listenWhen: (previous, current) => current is CounterData,
               listener: (context, state) {
                 final counter = (state as CounterData).counter;
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(counter.toString()), duration: Duration(microseconds: 300),));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(counter.toString()), duration: Duration(milliseconds: 1500),));
                 },
               child: Center(
                 child: Column(

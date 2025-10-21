@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:collection/collection.dart';
 
 part 'counter_event.dart';
 
@@ -13,6 +14,8 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
   }
 
   int counter = 0;
+
+
 
   FutureOr<void> incrementEvent(event, emit) async {
     emit(CounterCalculating());

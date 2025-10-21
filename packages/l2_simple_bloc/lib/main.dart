@@ -20,16 +20,11 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key, required this.title});
 
   final String title;
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -37,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(widget.title),
+          title: Text(title),
         ),
         body: Center(
           child: Column(
@@ -62,31 +57,29 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         floatingActionButton: BlocBuilder<CounterBloc, CounterState>(
           builder: (context, state) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                FloatingActionButton(
-                  heroTag: "increment",
-                  onPressed:
-                      () =>
-                          state is! CounterCalculating
-                              ? context.read<CounterBloc>().add(IncrementCounterEvent())
-                              : null,
-                  tooltip: 'Increment',
-                  child: const Icon(Icons.add),
-                ),
-                FloatingActionButton(
-                  heroTag: "decrement",
-                  onPressed:
-                      () =>
-                          state is! CounterCalculating
-                              ? context.read<CounterBloc>().add(DecrementCounterEvent())
-                              : null,
-                  tooltip: 'Decrement',
-                  child: const Icon(Icons.remove),
-                ),
-              ],
-            );
+            switch (state) {
+              case CounterData():
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    FloatingActionButton(
+                      heroTag: "increment",
+                      onPressed: () => context.read<CounterBloc>().add(IncrementCounterEvent()),
+                      tooltip: 'Increment',
+                      child: const Icon(Icons.add),
+                    ),
+                    FloatingActionButton(
+                      heroTag: "decrement",
+                      onPressed: () => context.read<CounterBloc>().add(DecrementCounterEvent()),
+                      tooltip: 'Decrement',
+                      child: const Icon(Icons.remove),
+                    ),
+                  ],
+                );
+
+              case CounterCalculating():
+                return SizedBox.shrink();
+            }
           },
         ), // This trailing comma makes auto-formatting nicer for build methods.
       ),

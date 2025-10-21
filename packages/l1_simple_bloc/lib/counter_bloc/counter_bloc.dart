@@ -13,7 +13,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterData> {
 
   int counter = 0;
 
-  FutureOr<void> incrementEvent(event, emit) async {
+  FutureOr<void> incrementEvent(event, emit) {
     counter++;
     emit(CounterData(counter));
   }

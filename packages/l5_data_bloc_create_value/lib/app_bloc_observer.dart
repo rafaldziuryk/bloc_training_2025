@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AppBlocObserver implements BlocObserver {
   @override
   void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
-    print('${bloc.runtimeType.toString()} onChange $change');
+    print('${bloc.runtimeType.toString()} onChange $change on ${bloc.hashCode}');
   }
 
   @override

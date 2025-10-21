@@ -4,7 +4,7 @@ import 'package:l5_data_bloc_create_value/app_bloc_observer.dart';
 import 'package:l5_data_bloc_create_value/main_page.dart';
 
 void main() {
-  // Bloc.observer = AppBlocObserver();
+  Bloc.observer = AppBlocObserver();
   runApp(const MyApp());
 }
 
